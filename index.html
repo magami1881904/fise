@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fișă Terapeutică - Concordia Clinic</title>
+    <style>
+        /* ===== CULORI DIN LOGO ===== */
+        :root {
+            --verde-inchis:     #006633;
+            --verde-deschis:    #66CC99;
+            --galben-auriu:     #FFCC00;
+            --portocaliu:       #FF9900;
+        }
+
+        /* ===== PRINT: FĂRĂ HEADER/FOOTER + CULORI PĂSTRATE ===== */
+        @media print {
+            @page {
+                margin: 15mm;
+                size: A4;
+                @top-left { content: none; }
+                @top-center { content: none; }
+                @top-right { content: none; }
+                @bottom-left { content: none; }
+                @bottom-center { content: none; }
+                @bottom-right { content: none; }
+            }
+            body, html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .container { box-shadow: none; border-radius: 0; padding: 0; }
+            .logo img { max-height: 65px; }
+            h1 { font-size: 24pt; margin: 10px 0; }
+            h2 { font-size: 16pt; color: var(--verde-inchis); }
+            hr { border-color: var(--verde-deschis); }
+        }
+
+        /* ===== STILURI GENERALE ===== */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.1);
+        }
+
+        /* LOGO */
+        .logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .logo img {
+            max-height: 85px;
+            width: auto;
+        }
+
+        /* TITLURI */
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin: 8px 0;
+            background: linear-gradient(to right, var(--verde-inchis), var(--portocaliu));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--verde-inchis);
+            margin: 5px 0 25px;
+            font-weight: 600;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 6px;
+            font-weight: bold;
+            color: var(--verde-inchis);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--verde-deschis);
+            box-shadow: 0 0 0 3px rgba(102, 204, 153, 0.2);
+        }
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid var(--verde-deschis);
+            margin: 25px 0;
+        }
+
+        /* ===== CUSTOM SELECT (fără căutare) ===== */
+        .custom-select {
+            position: relative;
+            margin: 18px 0;
+            font-size: 15px;
+        }
+        .select-trigger {
+            padding: 13px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 50px;
+            transition: border 0.2s;
+        }
+        .select-trigger:hover {
+            border-color: var(--verde-deschis);
+        }
+        .select-trigger .placeholder {
+            color: #999;
+        }
+        .select-trigger .arrow {
+            width: 0; height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 7px solid var(--verde-inchis);
+            transition: transform 0.2s;
+        }
+        .select-trigger.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-select .options {
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1.5px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: white;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .custom-select.open .options {
+            display: block;
+        }
+        .custom-select .options li {
+            padding: 11px 14px;
+            cursor: pointer;
+            white-space: normal;
+            line-height: 1.5;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        .custom-select .options li:hover {
+            background: #f5f9ff;
+        }
+        .custom-select .options li.selected {
+            background: var(--verde-inchis);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* BUTON */
+        .btn {
+            background: linear-gradient(to right, var(--verde-inchis), var(--portocaliu));
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+            display: block;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,102,51,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOGO -->
+    <div class="logo">
+        <img src="Picture1.jpg" alt="Concordia Clinic">
+    </div>
+
+    <h1>Fișă Terapeutică</h1>
+
+    <label>Nume terapeut</label>
+    <input type="text" id="terapeut" placeholder="ex: Ana Popescu">
+
+    <label>Date client</label>
+    <textarea id="client" placeholder="Istoric, observații, stare actuală..."></textarea>
+
+    <label>Data ședinței</label>
+    <input type="date" id="data">
+
+    <hr>
+
+    <!-- ETAPE -->
+    <h2>Etape terapeutice</h2>
+    <div class="custom-select" data-id="etape">
+        <div class="select-trigger">
+            <span class="placeholder">Alege etapele...</span>
+            <div class="arrow"></div>
+        </div>
+        <ul class="options">
+            <li data-value="e1">Stabilirea relației terapeutice - legătură sigură și de încredere între terapeut și client</li>
+            <li data-value="e2">Contractare - Definirea obiectivelor terapeutice a nevoilor și resurselor clientului inclusiv clarificarea rolurilor și valorilor în relații</li>
+            <li data-value="e3">Redecizie: Momentul în care clientul ia decizii noi bazate pe o perspectivă eliberată experimentând moduri diferite de a fi atât în sesiuni cât și în afara lor</li>
+            <li data-value="e4">Reorientare către autonomie: Reintegrarea pozițiilor sănătoase de viață reconectarea cu stările ego inițiale și dezvoltarea autonomiei cu posibile reveniri pentru a evita recăderile în pattern-uri vechi.</li>
+            <li data-value="e5">Decontaminarea – Procesul prin care starea eului Adult este eliberată de influențele intruzive ale stărilor Părinte sau Copil</li>
+            <li data-value="e6">Deconfuzia – Clarificarea stării eului Copil astfel încât clientul să înțeleagă și să proceseze emoțiile și comportamentele din copilărie care influențează prezentul.</li>
+            <li data-value="e7">Lucrul cu excluderea – Identificarea și abordarea situațiilor în care clientul „exclude” una sau mai multe stări ale eului</li>
+            <li data-value="e8">Integrarea stărilor eului – Asigurarea că Părintele Adultul și Copilul funcționează armonios fără ca una să domine excesiv sau să fie exclusă.</li>
+            <li data-value="e9">Scenariul de viață – Explorarea și modificarea scenariului de viață al clientului</li>
+            <li data-value="e10">Jocurilor psihologice – Identificarea și oprirea jocurilor psihologice repetitive</li>
+            <li data-value="e11">Lucrul cu injoncțiunile și contrainjoncțiunile</li>
+            <li data-value="e12">Consolidarea permisunilor</li>
+        </ul>
+    </div>
+    <label>Descriere etapă</label>
+    <textarea id="descEtapa"></textarea>
+
+    <hr>
+
+    <!-- INTERVENȚII CLASICE -->
+    <h2>Intervenții - Școala Clasică</h2>
+    <div class="custom-select" data-id="clasica">
+        <div class="select-trigger">
+            <span class="placeholder">Alege intervențiile...</span>
+            <div class="arrow"></div>
+        </div>
+        <ul class="options">
+            <li data-value="i1">Interpretarea - implică oferirea unei explicații mai profunde a motivelor inconștiente din spatele comportamentelor</li>
+            <li data-value="i2">Cristalizarea - rezumă și condensează esența unei probleme sau soluții într-o formulare clară și memorabilă</li>
+            <li data-value="i3">Interogarea - întrebări pentru a clarifica și a explora aspecte specifice</li>
+            <li data-value="i4">Specificarea - precizarea și delimitarea clară a informațiilor furnizate de client ajutându-l să identifice pattern-uri sau inconsecvențe în relatarea sa</li>
+            <li data-value="i5">Confruntarea - evidențierea directă a contradicțiilor sau incongruențelor dintre ceea ce spune clientul și ceea ce face</li>
+            <li data-value="i6">Explicarea - descriere rațională și teoretică a mecanismelor psihologice observate</li>
+            <li data-value="i7">Ilustrarea - utilizează exemple metafore sau anecdote pentru a face conceptele abstracte mai accesibile și relatable</li>
+            <li data-value="i8">Confirmarea - validează și întărește observațiile sau progresele clientului</li>
+        </ul>
+    </div>
+    <label>Descriere intervenție clasică</label>
+    <textarea id="descClasica"></textarea>
+
+    <hr>
+
+    <!-- INTERVENȚII RELAȚIONALE -->
+    <h2>Intervenții - Școala Relațională</h2>
+    <div class="custom-select" data-id="relation">
+        <div class="select-trigger">
+            <span class="placeholder">Alege intervențiile...</span>
+            <div class="arrow"></div>
+        </div>
+        <ul class="options">
+            <li data-value="r1">Tranzacții empatice - Interacțiuni între terapeut și client bazate pe înțelegere și rezonanță emoțională</li>
+            <li data-value="r2">Specificarea - Clarificarea și delimitarea detaliilor din relatările clientului ajutându-l să identifice și să se articuleze</li>
+            <li data-value="r3">Empatia - Capacitatea terapeutului de a simți și reflecta emoțiile clientului</li>
+            <li data-value="r4">Investigarea empatică - Procesul prin care terapeutul explorează experiențele clientului cu sensibilitate și curiozitate</li>
+            <li data-value="r5">Conținerea - Oferirea unui spațiu emoțional securizant de către terapeut</li>
+            <li data-value="r6">Auto-dezvăluirea - Dezvăluirea selectivă și intenționată de către terapeut a unor experiențe personale relevante</li>
+            <li data-value="r7">Interpretarea - Furnizarea unei explicații profunde care leagă comportamentele sau emoțiile clientului de dinamica stărilor eului sau de scenariul de viață</li>
+        </ul>
+    </div>
+    <label>Descriere intervenție relațională</label>
+    <textarea id="descRelation"></textarea>
+
+    <button class="btn no-print" onclick="printFisa()">Printează / Salvează ca PDF</button>
+</div>
+
+<script>
+    // Data de azi
+    document.getElementById('data').valueAsDate = new Date();
+
+    // Custom Select
+    document.querySelectorAll('.custom-select').forEach(select => {
+        const trigger = select.querySelector('.select-trigger');
+        const placeholder = trigger.querySelector('.placeholder');
+        const options = select.querySelector('.options');
+
+        trigger.addEventListener('click', () => {
+            select.classList.toggle('open');
+            updateDisplay();
+        });
+
+        options.querySelectorAll('li').forEach(li => {
+            li.addEventListener('click', e => {
+                e.stopPropagation();
+                li.classList.toggle('selected');
+                updateDisplay();
+            });
+        });
+
+        function updateDisplay() {
+            const selected = options.querySelectorAll('li.selected');
+            if (selected.length === 0) {
+                placeholder.textContent = 'Alege...';
+                placeholder.style.color = '#999';
+            } else {
+                placeholder.textContent = selected.length + ' selectate';
+                placeholder.style.color = '#2c3e50';
+            }
+        }
+
+        document.addEventListener('click', e => {
+            if (!select.contains(e.target)) select.classList.remove('open');
+        });
+
+        select.getSelected = () => Array.from(options.querySelectorAll('li.selected'))
+            .map(li => ({ value: li.dataset.value, text: li.textContent }));
+    });
+
+    // Print
+    function printFisa() {
+        const getSel = id => {
+            const s = document.querySelector(`.custom-select[data-id="${id}"]`);
+            return s ? s.getSelected().map(o => o.text) : [];
+        };
+
+        const etape = getSel('etape');
+        const clasica = getSel('clasica');
+        const relation = getSel('relation');
+
+        const content = `
+            <div style="text-align:center;margin-bottom:20px;">
+                <img src="Picture1.jpg" style="max-height:65px;">
+            </div>
+            <h1 style="text-align:center;font-size:24pt;margin:10px 0;background:linear-gradient(to right,#006633,#FF9900);
+            -webkit-background-clip:text;
+            background-clip:text;color:transparent;">
+                Fișă Terapeutică
+            </h1>
+
+            <p><strong>Terapeut:</strong> ${document.getElementById('terapeut').value || '—'}</p>
+            <p><strong>Data ședinței:</strong> ${document.getElementById('data').value || '—'}</p>
+            <hr style="border:2px solid #66CC99;margin:20px 0;">
+
+            <h2 style="color:#006633;font-size:16pt;">Date client</h2>
+            <p>${(document.getElementById('client').value||'—').replace(/\n/g,'<br>')}</p>
+            <hr style="border:2px solid #66CC99;margin:20px 0;">
+
+            <h2 style="color:#006633;">Etape terapeutice selectate</h2>
+            <ul style="margin:10px 0;padding-left:20px;">${etape.length?etape.map(t=>`<li>${t}</li>`).join(''):'<li>— Nicio etapă</li>'}</ul>
+            ${document.getElementById('descEtapa').value?`<h2 style="color:#006633;">Descriere etapă</h2><p>${document.getElementById('descEtapa').value.replace(/\n/g,'<br>')}</p><hr style="border:2px solid #66CC99;margin:20px 0;">`:''}
+
+            <h2 style="color:#006633;">Intervenții - Școala Clasică</h2>
+            <ul style="margin:10px 0;padding-left:20px;">${clasica.length?clasica.map(t=>`<li>${t}</li>`).join(''):'<li>— Nicio intervenție</li>'}</ul>
+            ${document.getElementById('descClasica').value?`<h2 style="color:#006633;">Descriere intervenție clasică</h2><p>${document.getElementById('descClasica').value.replace(/\n/g,'<br>')}</p><hr style="border:2px solid #66CC99;margin:20px 0;">`:''}
+
+            <h2 style="color:#006633;">Intervenții - Școala Relațională</h2>
+            <ul style="margin:10px 0;padding-left:20px;">${relation.length?relation.map(t=>`<li>${t}</li>`).join(''):'<li>— Nicio intervenție</li>'}</ul>
+            ${document.getElementById('descRelation').value?`<h2 style="color:#006633;">Descriere intervenție relațională</h2><p>${document.getElementById('descRelation').value.replace(/\n/g,'<br>')}</p>`:''}
+        `;
+
+        const win = window.open('', '_blank');
+        win.document.write(`
+            <!DOCTYPE html>
+            <html><head><meta charset="UTF-8">
+            <style>
+                @page { margin:15mm; size:A4; }
+                body { font-family:Arial,sans-serif; margin:0; padding:0; line-height:1.6; }
+                .print { padding:20mm; }
+                img { max-height:65px; }
+                h1 { font-size:24pt; background:linear-gradient(to right,#006633,#FF9900); 
+                    -webkit-background-clip:text; background-clip:text; 
+                    color:transparent; text-align:center; margin:10px 0; }
+                h2 { font-size:16pt; color:#006633; margin-top:25px; }
+                p, ul { margin:8px 0; }
+                ul { padding-left:20px; }
+                hr { border:2px solid #66CC99; margin:20px 0; }
+            </style></head>
+            <body><div class="print">${content}</div></body></html>
+        `);
+        win.document.close();
+        setTimeout(() => { win.print(); win.close(); }, 500);
+    }
+</script>
+
+</body>
+</html>
